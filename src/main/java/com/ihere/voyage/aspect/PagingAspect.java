@@ -2,7 +2,6 @@ package com.ihere.voyage.aspect;
 
 import com.ihere.voyage.annotation.Paging;
 import com.ihere.voyage.entity.Mouse;
-import org.aopalliance.intercept.MethodInvocation;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;

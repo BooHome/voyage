@@ -6,7 +6,6 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
@@ -17,9 +16,8 @@ import java.util.UUID;
  * @description:
  */
 public class ImageCutUtil {
-    public static String splitImage(File file) throws IOException {
+    public static String splitImage(InputStream fis) throws IOException {
         // 读入大图
-        FileInputStream fis = new FileInputStream(file);
         BufferedImage image = ImageIO.read(fis);
         // 分割成rows*cols个小图
         int rows = Constant.IMAGE_CUT_ROWS;
@@ -46,9 +44,14 @@ public class ImageCutUtil {
         }
         String fileName = UUID.randomUUID().toString().replace("-", "");
         // 输出小图
-        for (int i = 0; i < imgs.length; i++) {
-            ImageIO.write(imgs[i], "jpg", new File(Constant.IMAGE_CUT_PATH + fileName + i + ".jpg"));
+        for (int i = 1; i <=imgs.length; i++) {
+            if(i==imgs.length){
+                ImageIO.write(imgs[8], "jpg", new File(Constant.IMAGE_CUT_PATH + fileName + "0" + ".jpg"));
+            }else{
+                ImageIO.write(imgs[i-1], "jpg", new File(Constant.IMAGE_CUT_PATH + fileName + i + ".jpg"));
+            }
         }
+        mergeImage(fileName);
         return fileName;
     }
 
@@ -60,8 +63,13 @@ public class ImageCutUtil {
         int type;
         //读入小图
         File[] imgFiles = new File[chunks];
-        for (int i = 0; i < chunks; i++) {
-            imgFiles[i] = new File(Constant.IMAGE_CUT_PATH + fileName + i + ".jpg");
+        int k=0;
+        for (int i = 1; i <= chunks; i++) {
+            if(i==chunks){
+                imgFiles[8] = new File(Constant.IMAGE_CUT_PATH + fileName + 0 + ".jpg");
+            }else{
+                imgFiles[i-1] = new File(Constant.IMAGE_CUT_PATH + fileName + i + ".jpg");
+            }
         }
         //创建BufferedImage
         BufferedImage[] buffImages = new BufferedImage[chunks];
@@ -72,6 +80,9 @@ public class ImageCutUtil {
         chunkWidth = buffImages[0].getWidth();
         chunkHeight = buffImages[0].getHeight();
         //设置拼接后图的大小和类型
+        if (0 == type) {
+            type = 5;
+        }
         BufferedImage finalImg = new BufferedImage(chunkWidth * cols, chunkHeight * rows, type);
         //写入图像内容
         int num = 0;
@@ -82,9 +93,11 @@ public class ImageCutUtil {
             }
         }
         //输出拼接后的图像
-        ImageIO.write(finalImg, "jpeg", new File(Constant.IMAGE_CUT_PATH + fileName+Constant.IMAGE_CUT_FINAL_NAME+".jpg"));
+        ImageIO.write(finalImg, "jpeg", new File(Constant.IMAGE_CUT_PATH + fileName + Constant.IMAGE_CUT_FINAL_NAME + ".jpg"));
         InputStream is = (InputStream) ImageIO.createImageInputStream(finalImg);
-        is.close();
+        if (is != null) {
+            is.close();
+        }
     }
 
 }

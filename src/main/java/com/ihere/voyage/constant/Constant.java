@@ -31,7 +31,7 @@ public class Constant {
 	/**
 	 * 分割图片路径
 	 */
-	public  static final String IMAGE_CUT_PATH="";
+	public  static final String IMAGE_CUT_PATH="D:\\GitWork\\voyage\\src\\main\\resources\\static\\image\\";
 	/**
 	 * 合并图片后缀
 	 */

@@ -1,15 +1,24 @@
 package com.ihere.voyage.controller;
 
+import com.ihere.voyage.pojo.bo.InitResult;
 import com.ihere.voyage.service.PuzzleService;
 import com.ihere.voyage.util.NumberUtil;
+import com.ihere.voyage.util.file.ImageCutUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
-import java.util.Random;
 
 /**
  * @author: fengshibo
@@ -18,60 +27,38 @@ import java.util.Random;
  */
 @Controller
 @RequestMapping("puzzle")
+@Api(tags = "Puzzle数据接口")
 public class PuzzleController {
 
     @Autowired
     private PuzzleService puzzleService;
 
-    @GetMapping("solve")
+    @GetMapping(value = "solve", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "获取路径", notes = "获取路径")
     @ResponseBody
     public List<Integer> getRoute(String arrStr) {
-        String[] split = arrStr.split("");
-        int[][] arr = new int[3][3];
-        int k = 0;
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                arr[i][j] = Integer.parseInt(split[k]);
-                k += 1;
-            }
-        }
-        return NumberUtil.getRoute(arr);
+        return puzzleService.getRoute(arrStr);
     }
 
-    @GetMapping("init")
+    @GetMapping(value = "init/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "获取初始化数据", notes = "获取初始化数据")
     @ResponseBody
-    public InitResult getInitRandomArr(String arr) {
-        InitResult initResult = new InitResult();
-        int[][] ints = NumberUtil.initRandomArr();
-        int status = 0;
-        for (int i = 0; i < ints.length; i++) {
-            for (int j = 0; j < ints.length; j++) {
-                status = status * 10 + ints[i][j];
-            }
-        }
-        initResult.setInts(ints);
-        initResult.setIntsStr(status+"");
+    public InitResult getInitRandomArr(@PathVariable Integer userId) {
+        return puzzleService.getInitRandomArr(userId);
+    }
+
+    @PostMapping(value = "initFile/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "上传文件并获取初始化数据", notes = "上传文件并获取初始化数据")
+    @ResponseBody
+    public InitResult setFile(@ApiParam(required = false, value = "原始图像") MultipartFile file, @PathVariable Integer userId) throws IOException {
+        InitResult initResult = puzzleService.getInitRandomArr(userId);
+        String fileName = ImageCutUtil.splitImage(file.getInputStream());
+        initResult.setFileName(fileName);
         return initResult;
     }
 
-    private class InitResult {
-        private int[][] ints;
-        private String intsStr;
-
-        public int[][] getInts() {
-            return ints;
-        }
-
-        public void setInts(int[][] ints) {
-            this.ints = ints;
-        }
-
-        public String getIntsStr() {
-            return intsStr;
-        }
-
-        public void setIntsStr(String intsStr) {
-            this.intsStr = intsStr;
-        }
+    @GetMapping("main")
+    public String toPuzzle() {
+        return "puzzle";
     }
 }
