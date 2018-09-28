@@ -90,14 +90,13 @@
                     formData.append('file', document.querySelector('input[type=file]').files[0]);
                     // 设置axios的参数
                     var options = {
-                        // url: 'initFile/1',
-                        url: 'init/1' + '?&timestamp=' + (new Date()).getTime(),
+                        url: 'initFile/1' + '?&timestamp=' + (new Date()).getTime(),
                         data: formData,
                         method: 'post',
                         headers: {
                             'Content-Type': 'multipart/form-data'
                         }
-                    }
+                    };
                     axios(options).then(function (res) {
                         imgView.imgShow = false;
                         box.imageData = res.data;
@@ -108,11 +107,11 @@
                                     imgView.src[i][j] = '<div style="background-color: white" />';
                                     imgView.tempInitSrc[i][j] = '<div style="background-color: white" />';
                                 } else {
-                                    imgView.src[i][j] = '<img src="' + box.baseUrl + 'de6f70b8cbde415e9a1751527f6166ba' + num + '.jpg' + '">';
-                                    imgView.tempInitSrc[i][j] = '<img src="' + box.baseUrl + 'de6f70b8cbde415e9a1751527f6166ba' + num + '.jpg' + '">';
+                                    imgView.src[i][j] = '<img src="' + box.baseUrl + box.imageData.fileName + num + '.jpg' + '">';
+                                    imgView.tempInitSrc[i][j] = '<img src="' + box.baseUrl + box.imageData.fileName + num + '.jpg' + '">';
                                 }
-                                imgView.tempSrc[i][j] = '<img src="' + box.baseUrl + 'de6f70b8cbde415e9a1751527f6166ba' + num + '.jpg' + '">';
-                                imgView.tempTempSrc[i][j] = '<img src="' + box.baseUrl + 'de6f70b8cbde415e9a1751527f6166ba' + num + '.jpg' + '">';
+                                imgView.tempSrc[i][j] = '<img src="' + box.baseUrl + box.imageData.fileName + num + '.jpg' + '">';
+                                imgView.tempTempSrc[i][j] = '<img src="' + box.baseUrl +box.imageData.fileName + num + '.jpg' + '">';
                                 imgView.numData[i][j] = num;
                                 imgView.tempNumData[i][j] = num;
                             }
@@ -125,7 +124,7 @@
                     imgViewShow.imgShow = false;
                     for (var i = 0; i < 3; i++) {
                         for (var j = 0; j < 3; j++) {
-                            imgViewShow.src[i][j] = '<img src="' + box.baseUrl + 'de6f70b8cbde415e9a1751527f6166ba' + imgViewShow.initData[i][j] + '.jpg' + '">';
+                            imgViewShow.src[i][j] = '<img src="' + box.baseUrl +box.imageData.fileName + imgViewShow.initData[i][j] + '.jpg' + '">';
                         }
                     }
                     imgViewShow.imgShow = true;
