@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 public class TokenTask {
     private static Logger logger = LoggerFactory.getLogger(TokenTask.class);
 
-    @Scheduled(fixedDelay = 100000)
+   // @Scheduled(fixedDelay = 100000)
     public void add() {
         logger.info("我正在执行.." + System.currentTimeMillis());
     }

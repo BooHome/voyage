@@ -29,7 +29,7 @@ public class NumberUtil {
     private int y;
 
     // 定义移动的数组
-    private static List<Integer> moveArr = new LinkedList<Integer>();
+    private  List<Integer> moveArr = new LinkedList<Integer>();
 
     // 定义终点状态
     private static final Integer WIN_STATE = 123456780;
@@ -270,12 +270,12 @@ public class NumberUtil {
         int num = 0;
         NumberUtil hrdTest = new NumberUtil(arr);
         hrdTest.solve();
-        while (moveArr.size() < 1) {
+        while (hrdTest.moveArr.size() < 1) {
             Integer status = hrdTest.getStatus();
             hrdTest = new NumberUtil(initRandomArr());
             hrdTest.solve();
         }
-        return moveArr;
+        return hrdTest.moveArr;
     }
 
     public static int[][] initRandomArr() {
@@ -295,7 +295,7 @@ public class NumberUtil {
                 k += 1;
             }
         }
-        if(getRoute(arr).size()<1){
+        if (getRoute(arr).size() < 1) {
             initRandomArr();
         }
         return arr;

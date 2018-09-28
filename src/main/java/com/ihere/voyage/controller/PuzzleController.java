@@ -33,14 +33,14 @@ public class PuzzleController {
     @Autowired
     private PuzzleService puzzleService;
 
-    @GetMapping(value = "solve", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "solve/{arrStr}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "获取路径", notes = "获取路径")
     @ResponseBody
-    public List<Integer> getRoute(String arrStr) {
+    public List<Integer> getRoute(@PathVariable String arrStr) {
         return puzzleService.getRoute(arrStr);
     }
 
-    @GetMapping(value = "init/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "init/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "获取初始化数据", notes = "获取初始化数据")
     @ResponseBody
     public InitResult getInitRandomArr(@PathVariable Integer userId) {
